@@ -66,7 +66,10 @@ for n=2,#arg do
    end
 end
 
+local status = 0
+
 if next(missing) ~= nil then
+   status = 1
    print("The following messages are MISSING from the catalog:\n")
    local t = {}
    for k in pairs(missing) do t[#t+1] = k end
@@ -83,6 +86,7 @@ end
 
 if #t > 0 then
    if next(missing) ~= nil then print() end
+   status = 1
    print("The following messages in the catalog are UNUSED:\n")
    table.sort(t, function(a,b) return a.lineno < b.lineno end)
    local cur_section
@@ -96,3 +100,5 @@ if #t > 0 then
       print("Line "..t[n].lineno..": "..t[n].id)
    end
 end
+
+os.exit(status)
