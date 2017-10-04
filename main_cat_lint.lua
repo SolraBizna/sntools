@@ -77,13 +77,22 @@ end
 local t = {}
 for id,msg in pairs(cat.messages) do
    if not msg.seen then
-      t[#t+1] = id
+      t[#t+1] = msg
    end
 end
 
 if #t > 0 then
    if next(missing) ~= nil then print() end
    print("The following messages in the catalog are UNUSED:\n")
-   table.sort(t)
-   for n=1,#t do print(t[n]) end
+   table.sort(t, function(a,b) return a.lineno < b.lineno end)
+   local cur_section
+   for n=1,#t do
+      if t[n].section ~= cur_section then
+         print("...")
+         print(t[n].section)
+         print("...")
+         cur_section = t[n].section
+      end
+      print("Line "..t[n].lineno..": "..t[n].id)
+   end
 end

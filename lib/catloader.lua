@@ -69,7 +69,7 @@ return function(path)
          local ending_line
          for n=cur_line+2,#lines do
             if lines[cur_line].type == "comment"
-            and lines[cur_line].text:match("^;+$") then
+            and lines[cur_line].text:match("^:+$") then
                ending_line = n
                break
             elseif lines[cur_line].type ~= "comment" then
@@ -89,6 +89,7 @@ return function(path)
                section_name = section_name .. " (again)"
             end
             section_comments[section_name] = {}
+            cur_section = section_name
             cur_line = ending_line + 1
          end
       end
