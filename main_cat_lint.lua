@@ -37,7 +37,10 @@ local cat = catloader(arg[1])
 
 local C_keyscraper = lpeg.P{
    (lpeg.V"string_run" + lpeg.V"nonstring_skip") * lpeg.Cp();
-   nonstring_skip = ((lpeg.V"char_constant" + 1) - lpeg.P'"')^1 * lpeg.Cc(false,false);
+   nonstring_skip = ((lpeg.V"comment" + lpeg.V"char_constant" + 1) - lpeg.P'"')^1 * lpeg.Cc(false,false);
+   comment = lpeg.V"single_line_comment" + lpeg.V"multi_line_comment";
+   single_line_comment = lpeg.P"//" * (1 - lpeg.S"\r\n")^0;
+   multi_line_comment = lpeg.P"/*" * (1 - lpeg.P"*/")^0 * lpeg.P"*/";
    char_constant = lpeg.P"'" * ((lpeg.V"escaped"+1)-lpeg.P"'")^0 * lpeg.P"'";
    escaped = lpeg.P"\\"*1;
    string_run = lpeg.Ct((lpeg.V"string" * lpeg.V"eat_whitespace")^1)
